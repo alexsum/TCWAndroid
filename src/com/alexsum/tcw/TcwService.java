@@ -134,6 +134,8 @@ public class TcwService extends Service {
     }
 
     protected int GetMailCount() {
+    	int googleMailUnreadMessages = 0;
+    	int totalUnread = 0;
         final String ACCOUNT_TYPE_GOOGLE = "com.google";
         Context context = getApplicationContext();
         AccountManager accountManager = AccountManager.get(context);
@@ -146,7 +148,7 @@ public class TcwService extends Service {
                 Cursor cursor = context.getContentResolver().query(labelsUri, null, null, null, null);
                 if (cursor != null) {
                     try {
-                        int googleMailUnreadMessages = 0;
+                        
                         if (cursor.moveToFirst()) {
                             final int canonicalNameIndex = cursor.getColumnIndexOrThrow(GmailContract.Labels.CANONICAL_NAME);
                             int unreadColumn = cursor.getColumnIndex("numUnreadConversations");
@@ -156,7 +158,7 @@ public class TcwService extends Service {
                                 }
                             } while (cursor.moveToNext());
                         }
-                        return googleMailUnreadMessages;
+ //                       return googleMailUnreadMessages;
                     } catch (Exception e) {
                         Log.e(LOG_TAG, e.getMessage(), e);
                     } finally {
@@ -166,19 +168,18 @@ public class TcwService extends Service {
             }
         }
 
-        // получаем почту от k9, если установлен, у нас есть на это права и он активен
         if (K9Helper.isK9Installed(context) && K9Helper.hasK9ReadPermission(context) && K9Helper.isK9Enabled(context)) {
             List<K9Helper.Account> accounts = K9Helper.getAccounts(context);
             if (accounts != null) {
-                int totalUnread = 0;
+                
                 for (K9Helper.Account k9account : accounts) {
                     totalUnread += K9Helper.getUnreadCount(context, k9account);
                 }
-                return totalUnread;
+//                return totalUnread;
             }
         }
 
-        return 0;
+        return googleMailUnreadMessages+totalUnread;
     }
 
 	protected void PlayRington(){
@@ -857,25 +858,7 @@ public class TcwService extends Service {
 		    nm.notify(1, notif);*/
 		  }
 	
-	class DBHelper extends SQLiteOpenHelper {
 
-	    public DBHelper(Context context) {
-	      // ����������� �����������
-	      super(context, "baseTCW", null, 1);
-	    }
-
-	    @Override
-	    public void onCreate(SQLiteDatabase db) {
-	      Log.d(LOG_TAG, "--- onCreate database ---");
-	      // ������� ������� � ������
-	      db.execSQL("create table stat (id integer primary key autoincrement,date text,incom integer, outgo integer, prc integer);");
-	    }
-
-	    @Override
-	    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-	    }
-	  }
 	
 	
 	

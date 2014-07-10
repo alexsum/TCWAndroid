@@ -247,24 +247,7 @@ public class aStatistic extends Activity {
 			
 		}
 	}
-	class DBHelper extends SQLiteOpenHelper {
 
-	    public DBHelper(Context context) {
-	      // конструктор суперкласса
-	      super(context, "baseTCW", null, 1);
-	    }
-
-	    @Override
-	    public void onCreate(SQLiteDatabase db) {
-	    	// создаем таблицу с полями
-//	      db.execSQL("create table stat (id integer primary key autoincrement,date text,incom integer, outgo integer, prc integer);");
-	    }
-
-	    @Override
-	    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-	    }
-	  }
 	private int textWidth(String str,Paint p){
 		int rv =0;
 		float[] widths = new float[str.length()+1];
