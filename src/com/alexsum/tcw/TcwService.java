@@ -851,7 +851,6 @@ public class TcwService extends Service {
 		    }
 		    
 		    
-		    // ������ ����, ����� ����������� ������� ����� �������
 //		    notif.flags |= Notification.FLAG_AUTO_CANCEL;
 		    
 		    // ����������
