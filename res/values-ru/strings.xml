@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TCW</string>
+    <string name="action_settings">Настройки</string>
+    <string name="Battery">Аккумулятор</string>
+    <string name="Battery100">100%</string>
+    <string name="Pebble">Pebble</string>
+    <string name="Charging">Зарядка</string>
+    <string name="Pluged">Подлючено</string>
+    <string name="Phone">Телефон</string>
+    <string name="SetupWatchface">Установить WatchFace</string>
+	<string name="SetupError1">Ошибка установки watchapp. У Вас установлено приложение Pebble?</string>
+	<string name="smsValueText">Новых СМС/MMC</string>
+    <string name="shtuk">шт.</string>
+    <string name="lostCalls">Пропущ. вызовы</string>
+    <string name="launchWF">Запустить WatchFace</string>
+    <string name="SetupTools">Установить утилиты</string>   
+    <string name="statistic">Статистика</string>    
+</resources>

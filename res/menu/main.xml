@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+    	android:id="@+id/menuInstallWatchface" 
+    	android:title="@string/SetupWatchface" />
+    <item android:id="@+id/menuLaunchWatchFace" 
+        android:title="@string/launchWF" />
+    <item android:id="@+id/menuInstallTools" android:title="@string/SetupTools"></item>
+</menu>

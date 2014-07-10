@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TCW</string>
+    <string name="action_settings">Settings</string>
+    <string name="Battery">Battery</string>
+    <string name="Battery100">100%</string>
+    <string name="Pebble">Pebble</string>
+    <string name="Charging">Charging</string>
+    <string name="Pluged">Plugged</string>
+    <string name="Phone">Phone</string>
+    <string name="SetupWatchface">Install watchface</string>
+    <string name="SetupError1">Error setting watchapp. You installed Pebble?</string>
+    <string name="smsValueText">New SMS/MMS</string>
+    <string name="shtuk">pcs</string>
+    <string name="lostCalls">Lost Calls</string>
+    <string name="inetOnline">OnLine</string>
+    <string name="inetOffline">OffLine</string>
+    <string name="launchWF">Launch WatchFace</string>
+    <string name="SetupTools">Install Tools</string>
+    <string name="statistic">Statistic</string>    
+
+</resources>
