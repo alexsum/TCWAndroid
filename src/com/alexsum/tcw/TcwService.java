@@ -3,6 +3,7 @@ package com.alexsum.tcw;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import android.accounts.Account;
@@ -131,46 +132,55 @@ public class TcwService extends Service {
     	if (oldisAlarmSet != isAlarmSet) rv=false;
     	return rv;
     }
-    
-    protected int GetMailCount(){
-    	int rv=0;
-    	final String ACCOUNT_TYPE_GOOGLE = "com.google";
-    	Context context=getApplicationContext();
-    	try{
-    		AccountManager accountManager = AccountManager.get(context);
-    		Account[] acnt =  accountManager.getAccountsByType(ACCOUNT_TYPE_GOOGLE);
-    		if (acnt != null && acnt.length > 0) {
-    			String account = acnt[0].name;
-    			final Uri labelsUri = GmailContract.Labels.getLabelsUri(account);
-    			final String inboxCanonicalName = GmailContract.Labels.LabelCanonicalNames.CANONICAL_NAME_ALL_MAIL;
-    			if(inboxCanonicalName != null){
-    			try{
-    				Cursor cursor = context.getContentResolver().query(labelsUri, null, null, null, null);
-    				try{
-    					if (cursor.moveToFirst()) {
-    						final int canonicalNameIndex = cursor.getColumnIndexOrThrow(GmailContract.Labels.CANONICAL_NAME);
-    						int unreadColumn = cursor.getColumnIndex("numUnreadConversations");
-    						int nameColumn = cursor.getColumnIndex("name");
-    						String name = cursor.getString(nameColumn);
-    						do{
-    							name = cursor.getString(nameColumn);
-//                				String unread = cursor.getString(unreadColumn);//here's the value you need
-    							if (inboxCanonicalName.equals(cursor.getString(canonicalNameIndex))) {
-    								rv=rv+cursor.getInt(unreadColumn);
-    							}
-    						}while(cursor.moveToNext());
-    					}
-    				}finally{
-    					cursor.close();
-    				}
-    			}finally{;}
-    			}
-    		}
-    	}finally{;}
-    	
-    	return rv;
+
+    protected int GetMailCount() {
+        final String ACCOUNT_TYPE_GOOGLE = "com.google";
+        Context context = getApplicationContext();
+        AccountManager accountManager = AccountManager.get(context);
+        Account[] acnt = accountManager.getAccountsByType(ACCOUNT_TYPE_GOOGLE);
+        if (acnt != null && acnt.length > 0) {
+            String account = acnt[0].name;
+            final Uri labelsUri = GmailContract.Labels.getLabelsUri(account);
+            final String inboxCanonicalName = GmailContract.Labels.LabelCanonicalNames.CANONICAL_NAME_ALL_MAIL;
+            if (inboxCanonicalName != null) {
+                Cursor cursor = context.getContentResolver().query(labelsUri, null, null, null, null);
+                if (cursor != null) {
+                    try {
+                        int googleMailUnreadMessages = 0;
+                        if (cursor.moveToFirst()) {
+                            final int canonicalNameIndex = cursor.getColumnIndexOrThrow(GmailContract.Labels.CANONICAL_NAME);
+                            int unreadColumn = cursor.getColumnIndex("numUnreadConversations");
+                            do {
+                                if (inboxCanonicalName.equals(cursor.getString(canonicalNameIndex))) {
+                                    googleMailUnreadMessages += cursor.getInt(unreadColumn);
+                                }
+                            } while (cursor.moveToNext());
+                        }
+                        return googleMailUnreadMessages;
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, e.getMessage(), e);
+                    } finally {
+                        cursor.close();
+                    }
+                }
+            }
+        }
+
+        // РїРѕР»СѓС‡Р°РµРј РїРѕС‡С‚Сѓ РѕС‚ k9, РµСЃР»Рё СѓСЃС‚Р°РЅРѕРІР»РµРЅ, Сѓ РЅР°СЃ РµСЃС‚СЊ РЅР° СЌС‚Рѕ РїСЂР°РІР° Рё РѕРЅ Р°РєС‚РёРІРµРЅ
+        if (K9Helper.isK9Installed(context) && K9Helper.hasK9ReadPermission(context) && K9Helper.isK9Enabled(context)) {
+            List<K9Helper.Account> accounts = K9Helper.getAccounts(context);
+            if (accounts != null) {
+                int totalUnread = 0;
+                for (K9Helper.Account k9account : accounts) {
+                    totalUnread += K9Helper.getUnreadCount(context, k9account);
+                }
+                return totalUnread;
+            }
+        }
+
+        return 0;
     }
-    
+
 	protected void PlayRington(){
 //		MediaPlayer player =  MediaPlayer.create(this,Settings.System.DEFAULT_RINGTONE_URI);
 //		MediaPlayer player = new MediaPlayer();
@@ -711,7 +721,7 @@ public class TcwService extends Service {
 	
 	@Override
 	public IBinder onBind(Intent arg0) {
-		// TODO Автоматически созданная заглушка метода
+		// TODO пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 		return null;
 	}
 
@@ -727,7 +737,7 @@ public class TcwService extends Service {
 		
 		Long time=dNow.getTime();
 		Long razn=(long)(60*60*24*1000*(-24));
-		time = time + razn; // -31 дней
+		time = time + razn; // -31 пїЅпїЅпїЅпїЅ
 		Date cdNow = new Date(time);
 		
 		
@@ -766,7 +776,7 @@ public class TcwService extends Service {
 		Context context = getApplicationContext();
 		Intent notificationIntent = new Intent(context, MainActivity.class);
 //		Intent notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://developer.alexanderklimov.ru/android/"));
-		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,	notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
+		PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		String messg ="";
 	    int SmallIcon= R.drawable.si0;
@@ -823,16 +833,16 @@ public class TcwService extends Service {
 		nm.notify(1/*NOTIFY_ID*/, builder.getNotification());
 		  
 		  
-/*		    // 1-я часть
+/*		    // 1-пїЅ пїЅпїЅпїЅпїЅпїЅ
 		    Notification notif = new Notification(R.drawable.icon , "Pebble TCW: starting", 
 		      System.currentTimeMillis());
 		    
-		    // 3-я часть
+		    // 3-пїЅ пїЅпїЅпїЅпїЅпїЅ
 		    Intent intent = new Intent(this, MainActivity.class);
 		    intent.putExtra("filename", "somefile");
 		    PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 		    
-		    // 2-я часть
+		    // 2-пїЅ пїЅпїЅпїЅпїЅпїЅ
 		    if (curPebbleBatteryStatus==-1){
 		    	notif.setLatestEventInfo(this, "Pebble SmartWatch: TCW", "Get data ...", pIntent);
 		    }else{
@@ -840,24 +850,24 @@ public class TcwService extends Service {
 		    }
 		    
 		    
-		    // ставим флаг, чтобы уведомление пропало после нажатия
+		    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //		    notif.flags |= Notification.FLAG_AUTO_CANCEL;
 		    
-		    // отправляем
+		    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		    nm.notify(1, notif);*/
 		  }
 	
 	class DBHelper extends SQLiteOpenHelper {
 
 	    public DBHelper(Context context) {
-	      // конструктор суперкласса
+	      // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	      super(context, "baseTCW", null, 1);
 	    }
 
 	    @Override
 	    public void onCreate(SQLiteDatabase db) {
 	      Log.d(LOG_TAG, "--- onCreate database ---");
-	      // создаем таблицу с полями
+	      // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	      db.execSQL("create table stat (id integer primary key autoincrement,date text,incom integer, outgo integer, prc integer);");
 	    }
 

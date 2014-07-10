@@ -1,10 +1,10 @@
 package com.alexsum.tcw;
 
-//200 - get_battery_status     получили 200 отправили статус батареи мобилы
+//200 - get_battery_status     пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 200 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 //201 - send_battery_status
 //202 - send_battery_charged
 
-//210 - set_battery_status    отправили 210 получили статус батареии пебблы
+//210 - set_battery_status    пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 210 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 //211 - receive_battery_status
 //212 - receive_battery_charged
 
@@ -93,7 +93,7 @@ public class MainActivity extends Activity {
 //		isPhoneCharging = Chg;
 //		PhoneBS.setText(curPhoneBatteryStatus+"%");
 //		if(Chg==true){
-//			PhoneBSch.setText("Зарядка");
+//			PhoneBSch.setText("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 //		}else{
 //			PhoneBSch.setText(""); 
 //		}
@@ -105,7 +105,7 @@ public class MainActivity extends Activity {
 //		isPebbleCharging = Chg;
 //		PebbleBS.setText(curPebbleBatteryStatus+"%");
 //		if(Chg==true){
-//			PebbleBSch.setText("Зарядка");
+//			PebbleBSch.setText("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 //		}else{
 //			PebbleBSch.setText("");
 //		}
@@ -124,11 +124,11 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-/*        UssdMessage ussd = new UssdMessage(4000,4000); // передается два параметра, задержка до и после (ms) создания сообщения
+/*        UssdMessage ussd = new UssdMessage(4000,4000); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ (ms) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (ussd.IsFound())
                 viewUSSD.setText("\n"+ussd.getMsg());
         else
-        	viewUSSD.setText("Ошибка USSD");*/
+        	viewUSSD.setText("пїЅпїЅпїЅпїЅпїЅпїЅ USSD");*/
 		super.onActivityResult(requestCode, resultCode, data);
 		Log.d("MainActivity", "requestCode = " + requestCode + ", resultCode = " + resultCode);
 	
@@ -389,7 +389,7 @@ public class MainActivity extends Activity {
 //            e.printStackTrace();
 //        }
 		br = new BroadcastReceiver() {
-		      // действия при получении сообщений
+		      // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			public void onReceive(Context context, Intent intent) {
 				int pnbs = intent.getIntExtra(PnBS, -1);
 				int pbbs = intent.getIntExtra(PbBS, -1);
@@ -453,7 +453,7 @@ public class MainActivity extends Activity {
 	     OnClickListener oclSmsImage = new OnClickListener() {
 	         @Override
 	         public void onClick(View v) {
-	           // Меняем текст в TextView (tvOut)
+	           // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ TextView (tvOut)
 	        	 try{
 	        		 Intent intent = new Intent(Intent.ACTION_MAIN);
 	        		 intent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -511,26 +511,37 @@ public class MainActivity extends Activity {
 	        	 SendReqToPebble();
 	         }
 	       };
-		phoneImage.setOnClickListener(oclphoneImage);	
-		
-		OnClickListener oclMailImage = new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Автоматически созданная заглушка метода
-				try{
-					Intent intent = getPackageManager().getLaunchIntentForPackage("com.google.android.gm");
-					startActivity(intent);
-				}finally{;}
-			}
-		}; 
-		mailImage.setOnClickListener(oclMailImage);
+        phoneImage.setOnClickListener(oclphoneImage);
+
+        OnClickListener oclMailImage = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                boolean mailIntentOpened = false;
+                Intent gmailIntent = getPackageManager().getLaunchIntentForPackage("com.google.android.gm");
+                if (gmailIntent != null) {
+                    mailIntentOpened = true;
+                    startActivity(gmailIntent);
+                }
+                if (!mailIntentOpened) {
+                    Context appContext = getApplicationContext();
+                    if (K9Helper.isK9Installed(appContext) && K9Helper.isK9Enabled(appContext)) {
+                        Intent k9intent = K9Helper.getStartK9Intent(getApplicationContext());
+                        if (k9intent != null) {
+                            mailIntentOpened = true;
+                            startActivity(k9intent);
+                        }
+                    }
+                }
+            }
+        };
+        mailImage.setOnClickListener(oclMailImage);
 		
 		OnClickListener oclbStat = new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Автоматически созданная заглушка метода
+				// TODO пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 				
 //				Context context=getApplicationContext();
 				Intent intent = new Intent(getApplicationContext(), aStatistic.class);
@@ -557,7 +568,7 @@ public class MainActivity extends Activity {
 
 /*    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        UssdMessage ussd = new UssdMessage(4000,4000); // передается два параметра, задержка до и после (ms) создания сообщения
+        UssdMessage ussd = new UssdMessage(4000,4000); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ (ms) пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if (ussd.IsFound())
                 this.view.append("\n"+ussd.getMsg());
         else
@@ -574,7 +585,7 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
-	    // Операции для выбранного пункта меню
+	    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 	    switch (item.getItemId()) 
 		{
 	    case R.id.menuInstallWatchface:
