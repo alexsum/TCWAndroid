@@ -8,21 +8,26 @@ package com.alexsum.tcw;
 //211 - receive_battery_status
 //212 - receive_battery_charged
 
+import java.util.List;
 import java.util.UUID;
 
 import android.R.color;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.CallLog;
@@ -82,6 +87,9 @@ public class MainActivity extends Activity {
 	public final static String OutgoMess = "outgomess";
 	
 	private  CountDownTimer StatTimer ;
+	
+	int googleMailUnreadMessages = 0;
+	int k9UnreadMessages = 0;
 
 //	String vibratorService = Context.VIBRATOR_SERVICE;
 //	Vibrator vibrator = (Vibrator)getSystemService(vibratorService);	
@@ -360,6 +368,57 @@ public class MainActivity extends Activity {
 	    }
 	  };
 	
+      protected void GetMailCount() {
+    	  googleMailUnreadMessages=0;
+    	  k9UnreadMessages=0;
+          final String ACCOUNT_TYPE_GOOGLE = "com.google";
+          Context context = getApplicationContext();
+          AccountManager accountManager = AccountManager.get(context);
+          Account[] acnt = accountManager.getAccountsByType(ACCOUNT_TYPE_GOOGLE);
+          if (acnt != null && acnt.length > 0) {
+              String account = acnt[0].name;
+              final Uri labelsUri = GmailContract.Labels.getLabelsUri(account);
+              final String inboxCanonicalName = GmailContract.Labels.LabelCanonicalNames.CANONICAL_NAME_ALL_MAIL;
+              if (inboxCanonicalName != null) {
+                  Cursor cursor = context.getContentResolver().query(labelsUri, null, null, null, null);
+                  if (cursor != null) {
+                      try {
+                          
+                          if (cursor.moveToFirst()) {
+                              final int canonicalNameIndex = cursor.getColumnIndexOrThrow(GmailContract.Labels.CANONICAL_NAME);
+                              int unreadColumn = cursor.getColumnIndex("numUnreadConversations");
+                              do {
+                                  if (inboxCanonicalName.equals(cursor.getString(canonicalNameIndex))) {
+                                      googleMailUnreadMessages += cursor.getInt(unreadColumn);
+                                  }
+                              } while (cursor.moveToNext());
+                          }
+   //                       return googleMailUnreadMessages;
+                      } catch (Exception e) {
+                          Log.e("MainActivity", e.getMessage(), e);
+                      } finally {
+                          cursor.close();
+                      }
+                  }
+              }
+          }
+
+          if (K9Helper.isK9Installed(context) && K9Helper.hasK9ReadPermission(context) && K9Helper.isK9Enabled(context)) {
+              List<K9Helper.Account> accounts = K9Helper.getAccounts(context);
+              if (accounts != null) {
+                  
+                  for (K9Helper.Account k9account : accounts) {
+                      k9UnreadMessages += K9Helper.getUnreadCount(context, k9account);
+                  }
+//                  return totalUnread;
+              }
+          }
+
+//          return googleMailUnreadMessages+totalUnread;
+      }
+      	  
+	  
+	  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -513,18 +572,25 @@ public class MainActivity extends Activity {
 	       };
         phoneImage.setOnClickListener(oclphoneImage);
 
+
+        
+        
+        
         OnClickListener oclMailImage = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO ������������� ��������� �������� ������
                 boolean mailIntentOpened = false;
+                Context appContext = getApplicationContext();
+                GetMailCount();
                 Intent gmailIntent = getPackageManager().getLaunchIntentForPackage("com.google.android.gm");
-                if (gmailIntent != null) {
+                
+                if (gmailIntent != null && (googleMailUnreadMessages>0 || !(K9Helper.isK9Installed(appContext) && K9Helper.isK9Enabled(appContext)))) {
                     mailIntentOpened = true;
                     startActivity(gmailIntent);
                 }
-                if (!mailIntentOpened) {
-                    Context appContext = getApplicationContext();
+                if (!mailIntentOpened /*&& k9UnreadMessages>0*/) {
+                    
                     if (K9Helper.isK9Installed(appContext) && K9Helper.isK9Enabled(appContext)) {
                         Intent k9intent = K9Helper.getStartK9Intent(getApplicationContext());
                         if (k9intent != null) {
